@@ -54,7 +54,14 @@ const IGNORE_PATTERNS = [
   '.local',
   'replit.nix',
   '.breakpoints',
-  'generated-icon.png',
+  'generated-icon.png'
+];
+
+const EXTRA_FILES = [
+  '.gitignore',
+  'postcss.config.js',
+  'vite.config.ts',
+  'tailwind.config.ts',
   'package-lock.json'
 ];
 
@@ -75,6 +82,15 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
       arrayOfFiles.push(fullPath);
     }
   });
+
+  // Add extra files that might be hidden or special
+  if (dirPath === '.') {
+    EXTRA_FILES.forEach(file => {
+      if (fs.existsSync(file) && !arrayOfFiles.includes(file)) {
+        arrayOfFiles.push(file);
+      }
+    });
+  }
 
   return arrayOfFiles;
 }
